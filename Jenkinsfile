@@ -12,11 +12,11 @@ pipeline {
             steps {
                 echo "📦 Checking out code from GitHub..."
                 withCredentials([usernamePassword(
-                    credentialsId: '43c562fb-44ae-40c7-ad53-6c33df458893',   // ✅ GitHub credentials
+                    credentialsId: '43c562fb-44ae-40c7-ad53-6c33df458893', // ✅ GitHub credentials
                     usernameVariable: 'GIT_USER',
                     passwordVariable: 'GIT_PASS'
                 )]) {
-                    git branch: 'main', url: "https://${GIT_USER}:${GIT_PASS}@github.com/Nayeem-2-Nayeem/cloudcare-devops.git"
+                    git branch: 'main', url: "https://${GIT_USER}:${GIT_PASS}@github.com/Nayeem2Nayeem/cloudcare.git"
                 }
             }
         }
@@ -34,13 +34,14 @@ pipeline {
             steps {
                 echo "📤 Pushing image to Docker Hub..."
                 withCredentials([usernamePassword(
-                    credentialsId: 'b151f1df-de8e-4d8d-ab4c-d644e2ef4d95',   // ✅ Docker Hub credentials
+                    credentialsId: 'b151f1df-de8e-4d8d-ab4c-d644e2ef4d95', // ✅ Docker Hub credentials
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
-                      echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                      echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                       docker push $DOCKER_IMAGE
+                      docker logout
                     '''
                 }
             }
@@ -56,7 +57,9 @@ pipeline {
                     sh '''
                       cd terraform
                       terraform init
-                      terraform apply -auto-approve
+                      terraform apply -auto-approve \
+                        -var "key_name=cloudcare-key" \
+                        -var "db_password=cloudcare123"
                     '''
                 }
             }
