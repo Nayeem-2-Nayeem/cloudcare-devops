@@ -16,7 +16,7 @@ pipeline {
                     usernameVariable: 'GIT_USER',
                     passwordVariable: 'GIT_PASS'
                 )]) {
-                    git branch: 'main', url: "https://${GIT_USER}:${GIT_PASS}@github.com/Nayeem2Nayeem/cloudcare-devops.git"
+                    git branch: 'main', url: "https://${GIT_USER}:${GIT_PASS}@github.com/Nayeem2Nayeem/cloudcare.git"
                 }
             }
         }
