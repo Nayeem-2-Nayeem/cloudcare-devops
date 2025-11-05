@@ -33,6 +33,7 @@ pipeline {
                     env.IMAGE_TAG = "${DOCKER_REPO}:${tag}"
                     env.LATEST_TAG = "${DOCKER_REPO}:latest"
                 }
+                // Build Docker image
                 sh '''
                   docker builder prune -f
                   docker build -t $IMAGE_TAG -f Dockerfile ./app
