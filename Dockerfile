@@ -1,14 +1,22 @@
+# Dockerfile
 FROM node:18
+
+# Set working directory inside container
 WORKDIR /usr/src/app
 
-# Copy package files first
-COPY app/package*.json ./
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy app source code
-COPY app/ ./
+# Copy the rest of the application files
+COPY . .
 
+# Expose port
 EXPOSE 3000
+
+# Start the application
 CMD ["node", "app.js"]
 
 
