@@ -68,12 +68,17 @@ pipeline {
         stage('Fetch EC2 Public IP') {
             steps {
                 echo "🌐 Fetching EC2 public IP..."
-                script {
-                    env.EC2_IP = sh(
-                        script: "aws ec2 describe-instances --region $AWS_REGION --query 'Reservations[*].Instances[*].PublicIpAddress' --output text",
-                        returnStdout: true
-                    ).trim()
-                    echo "✅ EC2 Public IP: ${env.EC2_IP}"
+                withCredentials([
+                    string(credentialsId: 'aws_key', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws_secret_key', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    script {
+                        env.EC2_IP = sh(
+                            script: "aws ec2 describe-instances --region $AWS_REGION --query 'Reservations[*].Instances[*].PublicIpAddress' --output text",
+                            returnStdout: true
+                        ).trim()
+                        echo "✅ EC2 Public IP: ${env.EC2_IP}"
+                    }
                 }
             }
         }
