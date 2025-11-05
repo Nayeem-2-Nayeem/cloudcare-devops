@@ -104,7 +104,7 @@ pipeline {
                       cd ansible
                       echo "[ec2]" > hosts
                       echo "$EC2_IP ansible_user=ubuntu ansible_ssh_private_key_file=$SSH_KEY" >> hosts
-                      ansible-playbook -i hosts setup.yml -e "docker_image=$LATEST_TAG"
+                      ansible-playbook -i hosts deploy.yml -e "docker_image=$LATEST_TAG"
                     '''
                 }
             }
