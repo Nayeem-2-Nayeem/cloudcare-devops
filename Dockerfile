@@ -1,11 +1,13 @@
 FROM node:18
 WORKDIR /usr/src/app
 
+# Copy only package files first for caching npm install
 COPY app/package*.json ./
 RUN npm install
 
-COPY . .
+# Copy only the app source code
+COPY app/ ./
 
 EXPOSE 3000
-CMD ["sh", "-c", "node app.js"]
+CMD ["node", "app.js"]
 
