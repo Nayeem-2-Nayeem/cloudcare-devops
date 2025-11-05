@@ -35,7 +35,7 @@ pipeline {
                 }
                 sh '''
                   docker builder prune -f
-                  docker build -t $IMAGE_TAG .
+                  sh "docker build -t $IMAGE_TAG ./app"
                   docker tag $IMAGE_TAG $LATEST_TAG
                 '''
             }
