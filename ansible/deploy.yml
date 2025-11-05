@@ -2,15 +2,19 @@
 - name: Configure EC2 instance
   hosts: all
   become: yes
+  vars:
+    docker_image: "{{ docker_image }}"
 
   tasks:
     - name: Update system
       apt:
         update_cache: yes
 
-    - name: Install Docker
+    - name: Install required packages
       apt:
-        name: docker.io
+        name:
+          - docker.io
+          - python3-pip
         state: present
 
     - name: Start Docker service
@@ -19,11 +23,16 @@
         state: started
         enabled: true
 
+    - name: Pull CloudCare Docker image
+      docker_image:
+        name: "{{ docker_image }}"
+        source: pull
+
     - name: Run CloudCare container
       docker_container:
         name: cloudcare_app
         image: "{{ docker_image }}"
+        state: started
+        restart_policy: always
         ports:
           - "80:80"
-        restart_policy: always
-
